@@ -1,0 +1,60 @@
+﻿<Window x:Class="Othello.OthelloApp.Presentation.View.SelectBoardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Othello.OthelloApp.Presentation.View"
+        xmlns:model ="clr-namespace:Othello.Business.Domain.Model;assembly=Othello.Business"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="ボード選択" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
+        DataContext="{DynamicResource boardTypes}">
+    <Window.Resources>
+        <local:OthelloBoardTypeToInfo x:Key="boardTypeToInfo"/>
+        <local:OthelloBoardInfoToControl x:Key="boardInfoToCtrl"/>
+        <ObjectDataProvider x:Key="boardTypes" MethodName="GetValues" 
+                            ObjectType="{x:Type sys:Enum}"> 
+            <ObjectDataProvider.MethodParameters> 
+                <x:Type TypeName="model:OthelloBoardType"/> 
+            </ObjectDataProvider.MethodParameters> 
+        </ObjectDataProvider>
+    </Window.Resources>
+    <StackPanel>
+        <TextBlock Margin="10,10,10,10" Text="オセロボードを選択してください"/>
+        <GroupBox Margin="10,0,10,10" Header="ボード">
+            <StackPanel>
+                <Grid Margin="10"
+                    DataContext="{Binding /, Converter={StaticResource boardTypeToInfo}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ContentControl Grid.Column="0" Content="{Binding}" Margin="0,0,15,0" Grid.RowSpan="2" >
+                        <ContentControl.ContentTemplate>
+                            <DataTemplate>
+                                <Viewbox Stretch="Uniform" Width="170" Height="170">
+                                    <Rectangle DataContext="{Binding Converter={StaticResource boardInfoToCtrl}}"
+                                        Width="{Binding ActualWidth}" Height="{Binding ActualHeight}">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Visual="{Binding}"/>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Viewbox>
+                            </DataTemplate>
+                        </ContentControl.ContentTemplate>
+                    </ContentControl>
+                    <StackPanel Grid.Column="1" >
+                        <TextBlock  Text="詳細："/>
+                        <TextBlock  Text="{Binding PlayerNumber, StringFormat={}{0}人用}"/>
+                        <StackPanel Grid.Column="1"  Orientation="Horizontal">
+                            <TextBlock  Text="{Binding Game.Board.Height, StringFormat={}{0}×}"/>
+                            <TextBlock  Text="{Binding Game.Board.Width, StringFormat={}{0}マス}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            <ComboBox IsSynchronizedWithCurrentItem="True" x:Name="combo" ItemsSource="{Binding}" Margin="10,0,10,10"/>
+            </StackPanel>
+        </GroupBox>
+        <Button Content="OK" Margin="30,0,30,10" Click="Button_Click"/>
+    </StackPanel>
+</Window>

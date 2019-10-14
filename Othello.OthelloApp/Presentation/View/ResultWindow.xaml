@@ -1,0 +1,35 @@
+﻿<Window x:Class="Othello.OthelloApp.Presentation.View.ResultWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Othello.OthelloApp.Presentation.View"
+        mc:Ignorable="d"
+        Title="結果" SizeToContent="WidthAndHeight" MinWidth="150" ResizeMode="NoResize">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock FontSize="18" Text="勝者：" Margin="10"/>
+            <ItemsControl VerticalAlignment="Center" ItemsSource="{Binding}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Ellipse Margin="2" Height="30" Width="30" StrokeThickness="0.5">
+                            <Ellipse.Stroke>
+                                <LinearGradientBrush EndPoint="1, 1" StartPoint="0, 0">
+                                    <GradientStop Color="White" Offset="0.2" />
+                                    <GradientStop Color="Black" Offset="1" />
+                                </LinearGradientBrush>
+                            </Ellipse.Stroke>
+                            <Ellipse.Fill>
+                                <RadialGradientBrush GradientOrigin="0.0,0.0" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                                    <GradientStop Color="#FFFFFFFF" Offset="0"/>
+                                    <GradientStop Color="{Binding Converter={StaticResource playerToColor}}" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+        <Button Content="OK" HorizontalAlignment="Center" Padding="30,0,30,0" Margin="10,0,10,10" Click="Button_Click"/>
+    </StackPanel>
+</Window>
