@@ -74,11 +74,13 @@ namespace Othello.Business.Domain.Utils
                 boardType=OthelloBoardType.Board3,
                 first='a',
                 board=
-                "_____________\n" +
+                "  _________  \n" +
+                "  _________  \n" +
                 "_____cab_____\n" +
                 "_____bac_____\n" +
                 "_____cab_____\n" +
-                "_____________\n"
+                "  _________  \n" +
+                "  _________  \n"
             },
             new InnerBoardInfo()
             {

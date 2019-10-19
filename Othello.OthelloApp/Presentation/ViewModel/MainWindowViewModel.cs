@@ -24,7 +24,8 @@ namespace Othello.OthelloApp.Presentation.ViewModel
 
         public OthelloBoardType CurrentBoardType { get; set; }
         public Action<List<StoneType>> ShowResult { get; set; }
-        public RestartGameCommand RestartGameCommand { get; set; }
+        public DelegateCommand RestartGameCommand { get; set; }
+
         public ObservableCollection<PlayerViewModel> Players { get; set; }
         public OthelloBoardCtrlViewModel Board { get; set;}
         public StoneType CurrentPlayer { get; set; }
@@ -37,7 +38,13 @@ namespace Othello.OthelloApp.Presentation.ViewModel
             //ボードが更新されたら、自身も更新する
             Board.PropertyChanged += (sender, arg) => { Update(); };
             //リスタートしたらボードを更新する
-            RestartGameCommand = new RestartGameCommand(service, Board.Update);
+            RestartGameCommand = new DelegateCommand(
+                    (param) => {
+                        OthelloBoardType? boardType = param as OthelloBoardType?;
+                        service.Restart(boardType);
+                        Board.Update();
+                    }
+            );
             Board.Update();
         }
 

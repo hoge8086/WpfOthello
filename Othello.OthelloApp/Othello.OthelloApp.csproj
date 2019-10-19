@@ -64,11 +64,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Presentation\ViewModel\CellViewModel.cs" />
+    <Compile Include="Presentation\ViewModel\DelegateCommand.cs" />
     <Compile Include="Presentation\ViewModel\MainWindowViewModel.cs" />
     <Compile Include="Presentation\ViewModel\OthelloBoardCtrlViewModel.cs" />
     <Compile Include="Presentation\ViewModel\PlayerViewModel.cs" />
-    <Compile Include="Presentation\ViewModel\PutStoneCommand.cs" />
-    <Compile Include="Presentation\ViewModel\RestartGameCommand.cs" />
     <Compile Include="Presentation\View\ButtonHelper.cs" />
     <Compile Include="Presentation\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

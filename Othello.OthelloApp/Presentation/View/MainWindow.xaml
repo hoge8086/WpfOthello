@@ -33,28 +33,36 @@
                 <DataTemplate>
                     <Border>
                         <!--1プレヤーの表示-->
-                        <Canvas Height="40" Width="130" Margin="5">
-                            <Border Canvas.Top="7" Canvas.Left="7" CornerRadius="0,5,0,5" Background="Beige" BorderThickness="4" BorderBrush="White">
+                        <Canvas Height="45" Width="130" Margin="5">
+                            <Border Canvas.Top="10" Canvas.Left="10" CornerRadius="0,5,0,5" Background="Beige" BorderThickness="4" BorderBrush="White">
                                 <TextBlock FontSize="20" FontWeight="Bold" Foreground="Black" Text="{Binding StoneCount}" TextAlignment="Center" Width="100"/>
                             </Border>
-                            <Ellipse Canvas.Top="4" Canvas.Left="4" Height="35" Fill="LightGray" Width="35" StrokeThickness="4"/>
-                            <Ellipse Canvas.Top="0" Canvas.Left="0" Height="35" Width="35" StrokeThickness="4">
-                                <Ellipse.Style>
-                                    <Style TargetType="Ellipse">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=IsCurrentTurn}" Value="True">
-                                                <Setter Property="Stroke" Value="DeepPink"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Ellipse.Style>
-                                <Ellipse.Fill>
-                                    <RadialGradientBrush GradientOrigin="0.0,0.0" Center="0.3,0.3" RadiusX="0.4" RadiusY="0.4">
-                                        <GradientStop Color="#FFFFFFFF" Offset="0"/>
-                                        <GradientStop Color="{Binding StoneType, Converter={StaticResource playerToColor}}" Offset="1"/>
-                                    </RadialGradientBrush>
-                                </Ellipse.Fill>
-                            </Ellipse>
+                            <Grid Canvas.Top="0" Canvas.Left="0">
+                                <Ellipse  Height="42" Width="42" >
+                                    <Ellipse.Style>
+                                        <Style TargetType="Ellipse">
+                                            <Setter Property="Fill" Value="Transparent"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=IsCurrentTurn}" Value="True">
+                                                    <Setter Property="Fill">
+                                                        <Setter.Value>
+                                                            <RadialGradientBrush 
+                                                                  GradientOrigin="0.5,0.5" 
+                                                                  Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                                                                  <RadialGradientBrush.GradientStops>
+                                                                    <GradientStop Color="DeepPink" Offset="0.8" />
+                                                                    <GradientStop Color="Transparent" Offset="1" />
+                                                                  </RadialGradientBrush.GradientStops>
+                                                                </RadialGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                                <local:OthelloStone Canvas.Top="0" Canvas.Left="0" Height="30" Width="30" Color="{Binding StoneType, Converter={StaticResource playerToColor}}"/>
+                            </Grid>
                         </Canvas>
                     </Border>
                 </DataTemplate>

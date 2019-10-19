@@ -17,39 +17,58 @@ namespace Othello.OthelloApp.Presentation.ViewModel
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public PutStoneCommand PutStoneCommand { get; set; }
+        public DelegateCommand PutStoneCommand { get; set; }
         public ObservableCollection<ObservableCollection<CellViewModel>> Board { get; set; }
         public StoneType CurrentPlayer { get; set; }
-
-        public OthelloBoardCtrlViewModel(OthelloApplicationService service)
-        {
-            this.service = service;
-            PutStoneCommand = new PutStoneCommand(this);
-
-            Board = new ObservableCollection<ObservableCollection<CellViewModel>>();
-            Update();
-        }
-
-        public void PutStone(int x, int y)
-        {
-            service.PutStone(x, y, CurrentPlayer);
-            Update();
-        }
 
         //VisualBrush生成用のビューモデルコンストラクタ
         public OthelloBoardCtrlViewModel(Game game)
         {
             Board = new ObservableCollection<ObservableCollection<CellViewModel>>();
-            UpdateProperties(game);
+            Update(game);
         }
 
-        public void Update()
+        //コンストラクタ
+        public OthelloBoardCtrlViewModel(OthelloApplicationService service)
         {
-            UpdateProperties(service.GetGame());
+            this.service = service;
+            PutStoneCommand = new DelegateCommand(
+                    (param) => {
+                        var cell = param as CellViewModel;
+                        if (cell == null)
+                            return;
+                        service.PutStone(cell.X, cell.Y, CurrentPlayer);
+                        Update();
+                    },
+                    (param) => {
+                        var cell = param as CellViewModel;
+                        if (cell == null)
+                            return false;
+
+                        if(cell.Y < 0 || Board.Count <= cell.Y ||
+                           cell.X < 0 || Board[cell.Y].Count <= cell.X)
+                            return false;
+
+                        return Board[cell.Y][cell.X].CellType == CellType.EmptyAndCanPut;
+                    }
+                );
+
+            Board = new ObservableCollection<ObservableCollection<CellViewModel>>();
+            Update();
         }
 
-        public void UpdateProperties(Game game)
+        //ViewModelの更新(とViewへの通知)
+        public void Update(Game game = null)
         {
+            if(game == null)
+            {
+                if (service == null)
+                    throw new System.Exception();
+
+                 game = service.GetGame();
+            }
+
+            //更新
             Board.Clear();
             for(int y=0; y<game.Board.Height; y++)
             {
@@ -77,6 +96,8 @@ namespace Othello.OthelloApp.Presentation.ViewModel
 
             CurrentPlayer = game.CurrentTurn;
 
+            //通知
+            PutStoneCommand?.RaiseCanExecuteChanged();
             RaisePropertyChanged(null);
 
         }

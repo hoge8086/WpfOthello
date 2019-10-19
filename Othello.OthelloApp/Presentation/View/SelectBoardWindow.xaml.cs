@@ -21,8 +21,8 @@ namespace Othello.OthelloApp.Presentation.View
     /// </summary>
     public partial class SelectBoardWindow : Window
     {
-        RestartGameCommand restartGameCommand;
-        public SelectBoardWindow(RestartGameCommand restartGameCommand)
+        ICommand restartGameCommand;
+        public SelectBoardWindow(ICommand restartGameCommand)
         {
             InitializeComponent();
             this.restartGameCommand = restartGameCommand;

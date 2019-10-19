@@ -16,19 +16,19 @@ namespace Othello.OthelloApp.Presentation.View
             if (type == StoneType.Player2)
                 return Brushes.White.Color;
             if (type == StoneType.Player3)
-                return Brushes.Blue.Color;
+                return Brushes.Red.Color;
             if (type == StoneType.Player4)
                 return Brushes.Yellow.Color;
             if (type == StoneType.Player5)
                 return Brushes.Green.Color;
             if (type == StoneType.Player6)
-                return Brushes.Orange.Color;
+                return Brushes.Blue.Color;
             if (type == StoneType.Player7)
                 return Brushes.Peru.Color;
             if (type == StoneType.Player8)
                 return Brushes.Gold.Color;
 
-            return Brushes.Red.Color;
+            return Brushes.Plum.Color;
 
         }
 

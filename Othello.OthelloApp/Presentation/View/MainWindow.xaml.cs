@@ -39,6 +39,7 @@ namespace Othello.OthelloApp.Presentation.View
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             var win = new SelectBoardWindow(vm.RestartGameCommand);
+            //var win = new SelectBoardWindow(vm._RestartGameCommand);
             win.Owner = this;
             win.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             win.ShowDialog();
