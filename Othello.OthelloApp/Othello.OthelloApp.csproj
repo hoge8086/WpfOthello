@@ -69,7 +69,6 @@
     <Compile Include="Presentation\ViewModel\PlayerViewModel.cs" />
     <Compile Include="Presentation\ViewModel\PutStoneCommand.cs" />
     <Compile Include="Presentation\ViewModel\RestartGameCommand.cs" />
-    <Compile Include="Presentation\View\CellViewSelector.cs" />
     <Compile Include="Presentation\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -8,48 +8,6 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <!--オセロボード-->
     <ItemsControl Grid.Row="2" x:Name="board" ItemsSource="{Binding Board}" Margin="5">
-        <!--セルのデータテンプレート-->
-        <ItemsControl.Resources>
-            <!--セルではない空間-->
-            <DataTemplate x:Key="NotCell">
-                <Border BorderBrush="DarkRed" BorderThickness="0" Background="DarkRed" Height="50" Width="50"/>
-            </DataTemplate>
-            <!--空のセル-->
-            <DataTemplate x:Key="Empty" >
-                <Border BorderBrush="Black" BorderThickness=".75" Background="LimeGreen" Height="50" Width="50"/>
-            </DataTemplate>
-            <!--空で置けるセル-->
-            <DataTemplate x:Key="EmptyAndCanPut">
-                <Button Background="LimeGreen" BorderBrush="Black" BorderThickness=".75" Height="50" Width="50"
-                    Command="{Binding Path=DataContext.PutStoneCommand, ElementName=board }"
-                    CommandParameter="{Binding .}">
-                    <Ellipse Margin="2" Height="42" Width="42" Fill="Transparent" StrokeDashArray="2,2" StrokeThickness="3">
-                        <Ellipse.Stroke>
-                            <SolidColorBrush Color="{Binding DataContext.CurrentPlayer, ElementName=board, Converter={StaticResource playerToColor}}"/>
-                        </Ellipse.Stroke>
-                    </Ellipse>
-                </Button>
-            </DataTemplate>
-            <!--石が置いてあるセル-->
-            <DataTemplate x:Key="Stone">
-                <Border BorderBrush="Black" BorderThickness=".75" Background="LimeGreen" Height="50" Width="50">
-                    <Ellipse Margin="2" Height="42" Width="42" StrokeThickness="0.5">
-                        <Ellipse.Stroke>
-                            <LinearGradientBrush EndPoint="1, 1" StartPoint="0, 0">
-                                <GradientStop Color="White" Offset="0.2" />
-                                <GradientStop Color="Black" Offset="1" />
-                            </LinearGradientBrush>
-                        </Ellipse.Stroke>
-                        <Ellipse.Fill>
-                            <RadialGradientBrush GradientOrigin="0.0,0.0" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                                <GradientStop Color="#FFFFFFFF" Offset="0"/>
-                                <GradientStop Color="{Binding StoneType, Converter={StaticResource playerToColor}}" Offset="1"/>
-                            </RadialGradientBrush>
-                        </Ellipse.Fill>
-                    </Ellipse>
-                </Border>
-            </DataTemplate>
-        </ItemsControl.Resources>
         <ItemsControl.Template>
             <!--ボードの枠-->
             <ControlTemplate>
@@ -75,10 +33,75 @@
                             </StackPanel>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    <!--セルの表示はセレクターでデータテンプレートを選ぶ-->
-                    <ItemsControl.ItemTemplateSelector>
-                        <local:CellViewSelector/>
-                    </ItemsControl.ItemTemplateSelector>
+                    <ItemsControl.ItemTemplate>
+                        <!--セルの定義-->
+                        <DataTemplate>
+                            <!--ボタン(セル)-->
+                            <Button x:Name="button" BorderBrush="Black" BorderThickness=".75" Background="LimeGreen" Height="50" Width="50" >
+                                <!--石-->
+                                <Ellipse x:Name="ellipse" Margin="2" Height="42" Width="42" StrokeThickness="0.5"/>
+                            </Button>
+                            <!--データテンプレートを使用し、セルの状態で見せ方を変える-->
+                            <DataTemplate.Triggers>
+                                <!--【セルではない空間】-->
+                                <DataTrigger Binding="{Binding CellType}" Value="NotCell">
+                                    <!--セル背景は茶色-->
+                                    <Setter TargetName="button" Property="Background" Value="DarkRed"/>
+                                    <!--石は見えない-->
+                                    <Setter TargetName="ellipse" Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                                <!--【空のセル】-->
+                                <DataTrigger Binding="{Binding CellType}" Value="Empty">
+                                    <!--石は見えない-->
+                                    <Setter TargetName="ellipse" Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                                <!--【空で置けるセル】-->
+                                <DataTrigger Binding="{Binding CellType}" Value="EmptyAndCanPut">
+                                    <!--石は点線だけを表示-->
+                                        <!--石の色は透明-->
+                                        <Setter TargetName="ellipse" Property="Fill" Value="Transparent"/>
+                                        <!--石の枠をプレイヤー色で表示-->
+                                        <Setter TargetName="ellipse" Property="Stroke">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="{Binding DataContext.CurrentPlayer, ElementName=board, Converter={StaticResource playerToColor}}"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <!--石の枠を点線-->
+                                        <Setter TargetName="ellipse" Property="StrokeDashArray" Value="2,2"/>
+                                        <!--石の枠を3点にする-->
+                                        <Setter TargetName="ellipse" Property="StrokeThickness" Value="3"/>
+                                        <!--クリックしたときのコマンドを設定-->
+                                        <Setter TargetName="button" Property="Command" Value="{Binding Path=DataContext.PutStoneCommand, ElementName=board }"/>
+                                        <Setter TargetName="button" Property="CommandParameter" Value="{Binding .}"/>
+                                </DataTrigger>
+                                <!--【石が置いてあるセル】-->
+                                <DataTrigger Binding="{Binding CellType}" Value="PutStone">
+                                    <!--石の枠線にいい感じ陰影を付ける-->
+                                    <Setter TargetName="ellipse" Property="Stroke">
+                                        <Setter.Value>
+                                            <LinearGradientBrush EndPoint="1, 1" StartPoint="0, 0">
+                                                <!--左上を白色(光)-->
+                                                <GradientStop Color="White" Offset="0.2" />
+                                                <!--右下を黒色(影)-->
+                                                <GradientStop Color="Black" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <!--石にいい感じに光沢をつけて色を塗る-->
+                                    <Setter TargetName="ellipse" Property="Fill">
+                                        <Setter.Value>
+                                            <RadialGradientBrush GradientOrigin="0.0,0.0" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                                                <!--左上を白色にする-->
+                                                <GradientStop Color="#FFFFFFFF" Offset="0"/>
+                                                <!--プレイヤー色で塗る-->
+                                                <GradientStop Color="{Binding StoneType, Converter={StaticResource playerToColor}}" Offset="1"/>
+                                            </RadialGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
