@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Input;
 
 using Othello.Business.ApplicationService;
@@ -7,19 +8,36 @@ namespace Othello.OthelloApp.Presentation.ViewModel
 {
     public class PutStoneCommand : ICommand
     {
-        private OthelloApplicationService service;
-        private Action updateBoard;
-        public PutStoneCommand(OthelloApplicationService service, Action updateBoard) { this.service = service; this.updateBoard = updateBoard; }
+        private OthelloBoardCtrlViewModel board;
         public event EventHandler CanExecuteChanged;
-        public bool CanExecute(object parameter) { return true; }
+
+        public PutStoneCommand(OthelloBoardCtrlViewModel board)
+        {
+            this.board = board;
+            this.board.PropertyChanged += OnCanExecuteChanged;
+        }
+
+        public void OnCanExecuteChanged(object sender, PropertyChangedEventArgs e)
+        {
+            CanExecuteChanged?.Invoke(null, EventArgs.Empty);
+        }
+
+
+        public bool CanExecute(object parameter)
+        {
+            var cell = parameter as CellViewModel;
+            if (cell == null)
+                return false;
+
+            return board.Board[cell.Y][cell.X].CellType == CellType.EmptyAndCanPut;
+        }
         public void Execute(object parameter)
         {
             var cell = parameter as CellViewModel;
             if (cell == null)
                 return;
 
-            service.PutStone(cell.X, cell.Y, service.GetGame().CurrentTurn);
-            updateBoard();
+            board.PutStone(cell.X, cell.Y);
         }
     }
 }

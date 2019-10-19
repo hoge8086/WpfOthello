@@ -69,11 +69,16 @@
     <Compile Include="Presentation\ViewModel\PlayerViewModel.cs" />
     <Compile Include="Presentation\ViewModel\PutStoneCommand.cs" />
     <Compile Include="Presentation\ViewModel\RestartGameCommand.cs" />
+    <Compile Include="Presentation\View\ButtonHelper.cs" />
     <Compile Include="Presentation\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Presentation\View\OthelloBoardCtrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Presentation\View\OthelloStone.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -92,6 +97,9 @@
     </Compile>
     <Compile Include="Presentation\View\OthelloBoardInfoToControl.cs" />
     <Compile Include="Presentation\View\OthelloBoardTypeToInfo.cs" />
+    <Compile Include="Presentation\View\OthelloStone.xaml.cs">
+      <DependentUpon>OthelloStone.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\View\PlayerToColor.cs" />
     <Compile Include="Presentation\View\ResultWindow.xaml.cs">
       <DependentUpon>ResultWindow.xaml</DependentUpon>

@@ -24,9 +24,15 @@ namespace Othello.OthelloApp.Presentation.ViewModel
         public OthelloBoardCtrlViewModel(OthelloApplicationService service)
         {
             this.service = service;
-            PutStoneCommand = new PutStoneCommand(service, Update);
+            PutStoneCommand = new PutStoneCommand(this);
 
             Board = new ObservableCollection<ObservableCollection<CellViewModel>>();
+            Update();
+        }
+
+        public void PutStone(int x, int y)
+        {
+            service.PutStone(x, y, CurrentPlayer);
             Update();
         }
 

@@ -7,6 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <!--オセロボード-->
+    <UserControl.Resources>
+    </UserControl.Resources>
     <ItemsControl Grid.Row="2" x:Name="board" ItemsSource="{Binding Board}" Margin="5">
         <ItemsControl.Template>
             <!--ボードの枠-->
@@ -34,70 +36,71 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <!--セルの定義-->
                         <DataTemplate>
-                            <!--ボタン(セル)-->
-                            <Button x:Name="button" BorderBrush="Black" BorderThickness=".75" Background="LimeGreen" Height="50" Width="50" >
-                                <!--石-->
-                                <Ellipse x:Name="ellipse" Margin="2" Height="42" Width="42" StrokeThickness="0.5"/>
+                            <!--セルの定義(ボタン)-->
+                            <Button x:Name="button" Height="50" Width="50" BorderThickness=".75" Background="LimeGreen"
+                                    Command="{Binding Path=DataContext.PutStoneCommand, ElementName=board}"
+                                    local:ButtonHelper.CommandParameter="{Binding .}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <!--背景-->
+                                        <Grid>
+                                            <Border BorderBrush="Black" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" />
+                                            <ContentPresenter/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <!--石(デフォは非表示)-->
+                                <Grid>
+                                    <!--置いてあるとき-->
+                                    <local:OthelloStone x:Name="stone" Height="42" Width="42" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
+                                    <!--置けるとき-->
+                                    <Ellipse x:Name="ellipse"  Height="42" Width="42" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"
+                                            StrokeDashArray="2,2"
+                                            StrokeThickness="3">
+                                        <Ellipse.Stroke>
+                                            <SolidColorBrush Color="{Binding DataContext.CurrentPlayer, ElementName=board, Converter={StaticResource playerToColor}}"/>
+                                        </Ellipse.Stroke>
+                                    </Ellipse>
+                                    <!--Stroke="{Binding DataContext.CurrentPlayer, ElementName=board, Converter={StaticResource playerToColor}}"-->
+                                </Grid>
                             </Button>
                             <!--データテンプレートを使用し、セルの状態で見せ方を変える-->
                             <DataTemplate.Triggers>
                                 <!--【セルではない空間】-->
                                 <DataTrigger Binding="{Binding CellType}" Value="NotCell">
-                                    <!--セル背景は茶色-->
+                                    <!--セル背景を茶色にする-->
                                     <Setter TargetName="button" Property="Background" Value="DarkRed"/>
-                                    <!--石は見えない-->
-                                    <Setter TargetName="ellipse" Property="Visibility" Value="Hidden"/>
+                                    <Setter TargetName="button" Property="BorderThickness" Value="0"/>
                                 </DataTrigger>
                                 <!--【空のセル】-->
                                 <DataTrigger Binding="{Binding CellType}" Value="Empty">
-                                    <!--石は見えない-->
-                                    <Setter TargetName="ellipse" Property="Visibility" Value="Hidden"/>
+                                    <!--デフォが空のセルなので特に設定は不要-->
                                 </DataTrigger>
                                 <!--【空で置けるセル】-->
-                                <DataTrigger Binding="{Binding CellType}" Value="EmptyAndCanPut">
-                                    <!--石は点線だけを表示-->
-                                        <!--石の色は透明-->
-                                        <Setter TargetName="ellipse" Property="Fill" Value="Transparent"/>
-                                        <!--石の枠をプレイヤー色で表示-->
-                                        <Setter TargetName="ellipse" Property="Stroke">
-                                            <Setter.Value>
-                                                <SolidColorBrush Color="{Binding DataContext.CurrentPlayer, ElementName=board, Converter={StaticResource playerToColor}}"/>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <!--石の枠を点線-->
-                                        <Setter TargetName="ellipse" Property="StrokeDashArray" Value="2,2"/>
-                                        <!--石の枠を3点にする-->
-                                        <Setter TargetName="ellipse" Property="StrokeThickness" Value="3"/>
-                                        <!--クリックしたときのコマンドを設定-->
-                                        <Setter TargetName="button" Property="Command" Value="{Binding Path=DataContext.PutStoneCommand, ElementName=board }"/>
-                                        <Setter TargetName="button" Property="CommandParameter" Value="{Binding .}"/>
-                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding CellType}" Value="EmptyAndCanPut"/>
+                                        <Condition Binding="{Binding ElementName=button, Path=IsMouseOver}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <!--点線を表示する-->
+                                    <Setter TargetName="ellipse" Property="Visibility" Value="Visible"/>
+                                </MultiDataTrigger>
+                                <!--【空で置けるセル(マウスオーバー時)】-->
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding CellType}" Value="EmptyAndCanPut"/>
+                                        <Condition Binding="{Binding ElementName=button, Path=IsMouseOver}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <!--石を表示して現在のプレイヤーの色で塗る-->
+                                    <Setter TargetName="stone" Property="Color" Value="{Binding DataContext.CurrentPlayer, ElementName=board, Converter={StaticResource playerToColor}}"/>
+                                    <Setter TargetName="stone" Property="Visibility" Value="Visible"/>
+                                </MultiDataTrigger>
                                 <!--【石が置いてあるセル】-->
                                 <DataTrigger Binding="{Binding CellType}" Value="PutStone">
-                                    <!--石の枠線にいい感じ陰影を付ける-->
-                                    <Setter TargetName="ellipse" Property="Stroke">
-                                        <Setter.Value>
-                                            <LinearGradientBrush EndPoint="1, 1" StartPoint="0, 0">
-                                                <!--左上を白色(光)-->
-                                                <GradientStop Color="White" Offset="0.2" />
-                                                <!--右下を黒色(影)-->
-                                                <GradientStop Color="Black" Offset="1" />
-                                            </LinearGradientBrush>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <!--石にいい感じに光沢をつけて色を塗る-->
-                                    <Setter TargetName="ellipse" Property="Fill">
-                                        <Setter.Value>
-                                            <RadialGradientBrush GradientOrigin="0.0,0.0" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                                                <!--左上を白色にする-->
-                                                <GradientStop Color="#FFFFFFFF" Offset="0"/>
-                                                <!--プレイヤー色で塗る-->
-                                                <GradientStop Color="{Binding StoneType, Converter={StaticResource playerToColor}}" Offset="1"/>
-                                            </RadialGradientBrush>
-                                        </Setter.Value>
-                                    </Setter>
+                                    <!--石を表示して所有するプレイヤーの色で塗る-->
+                                    <Setter TargetName="stone" Property="Color" Value="{Binding StoneType, Converter={StaticResource playerToColor}}"/>
+                                    <Setter TargetName="stone" Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
