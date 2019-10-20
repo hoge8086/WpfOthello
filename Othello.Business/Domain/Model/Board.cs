@@ -103,9 +103,9 @@ namespace Othello.Business.Domain.Model
             return counter;
         }
 
-        public List<StoneType> CalcMostStoneTypes(StoneType stoneTypeMax)
+        public List<StoneType> CalcMostStoneTypes(StoneType lastStoneType)
         {
-            Dictionary<StoneType, int> counter = CountStones(stoneTypeMax);
+            Dictionary<StoneType, int> counter = CountStones(lastStoneType);
             int maxCount = counter.OrderBy(x => x.Value).First().Value;
             return counter.Where(x => x.Value >= maxCount).Select(x => x.Key).ToList();
         }

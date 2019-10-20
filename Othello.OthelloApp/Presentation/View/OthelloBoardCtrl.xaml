@@ -9,7 +9,7 @@
     <!--オセロボード-->
     <UserControl.Resources>
     </UserControl.Resources>
-    <ItemsControl Grid.Row="2" x:Name="board" ItemsSource="{Binding Board}" Margin="5">
+    <ItemsControl x:Name="board" ItemsSource="{Binding Board}" Margin="5">
         <ItemsControl.Template>
             <!--ボードの枠-->
             <ControlTemplate>
@@ -62,10 +62,9 @@
                                             <SolidColorBrush Color="{Binding DataContext.CurrentPlayer, ElementName=board, Converter={StaticResource playerToColor}}"/>
                                         </Ellipse.Stroke>
                                     </Ellipse>
-                                    <!--Stroke="{Binding DataContext.CurrentPlayer, ElementName=board, Converter={StaticResource playerToColor}}"-->
                                 </Grid>
                             </Button>
-                            <!--データテンプレートを使用し、セルの状態で見せ方を変える-->
+                            <!--データトリガーを使用し、セルの状態で見せ方を変える-->
                             <DataTemplate.Triggers>
                                 <!--【セルではない空間】-->
                                 <DataTrigger Binding="{Binding CellType}" Value="NotCell">

@@ -13,13 +13,13 @@ namespace Othello.Business.Domain.Model
         public StoneType CurrentTurn { get; private set; }
         public GameResult Result { get; private set; }
         public bool IsEnd { get => Result != null; }
-        public StoneType StoneTypeMax {get; private set;}
+        public StoneType LastStoneType {get; private set;}
 
-        public Game(Board board, StoneType turn, StoneType stoneTypeMax)
+        public Game(Board board, StoneType turn, StoneType lastStoneType)
         {
             Board = board;
             CurrentTurn = turn;
-            StoneTypeMax = stoneTypeMax;
+            LastStoneType = lastStoneType;
             Result = null;
         }
 
@@ -28,7 +28,7 @@ namespace Othello.Business.Domain.Model
             //Board = new Board(8, 8);
             Board = board;
             CurrentTurn = StoneType.Player1;
-            StoneTypeMax = StoneType.Player2;
+            LastStoneType = StoneType.Player2;
             Result = null;
         }
 
@@ -55,7 +55,7 @@ namespace Othello.Business.Domain.Model
 
         private void fowardTurn()
         {
-            var nextTurn = CurrentTurn.Next(StoneTypeMax);
+            var nextTurn = CurrentTurn.Next(LastStoneType);
 
             do
             {
@@ -64,9 +64,9 @@ namespace Othello.Business.Domain.Model
                     CurrentTurn = nextTurn;
                     return;
                 }
-                nextTurn = nextTurn.Next(StoneTypeMax);
+                nextTurn = nextTurn.Next(LastStoneType);
 
-            } while (nextTurn != CurrentTurn.Next(StoneTypeMax));
+            } while (nextTurn != CurrentTurn.Next(LastStoneType));
 
             Result = CreateGameResult();
         }
@@ -93,7 +93,7 @@ namespace Othello.Business.Domain.Model
 
         private GameResult CreateGameResult()
         {
-            return new GameResult(Board.CalcMostStoneTypes(StoneTypeMax));
+            return new GameResult(Board.CalcMostStoneTypes(LastStoneType));
         }
 
         private bool CanPutSomewhare(StoneType putStoneType)
@@ -136,7 +136,7 @@ namespace Othello.Business.Domain.Model
 
         public Dictionary<StoneType, int> CountStones()
         {
-            return Board.CountStones(StoneTypeMax);
+            return Board.CountStones(LastStoneType);
         }
     }
 }
