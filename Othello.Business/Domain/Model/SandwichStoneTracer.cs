@@ -37,7 +37,7 @@ namespace Othello.Business.Domain.Model
             if (tracingCell.Stone == null)
                 return false;
 
-            if (putStoneType == tracingCell.Stone)
+            if (putStoneType.Equals(tracingCell.Stone))
                 return true;
 
             var neighberCell = board.GetNeighberCell(tracingCell.Position, dir);

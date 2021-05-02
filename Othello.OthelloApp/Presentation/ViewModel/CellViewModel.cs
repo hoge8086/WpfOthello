@@ -16,7 +16,7 @@ namespace Othello.OthelloApp.Presentation.ViewModel
         public int X { get; set; }
         public int Y { get; set; }
         public CellType CellType { get; set; }
-        public StoneType? StoneType { get; set; }
+        public StoneType StoneType { get; set; }
     }
 
 }

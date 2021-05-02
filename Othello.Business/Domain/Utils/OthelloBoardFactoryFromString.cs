@@ -33,7 +33,7 @@ namespace Othello.Business.Domain.Utils
                 else if ('a' <= lower && lower <= 'z')
                 {
                     if (!players.ContainsKey(lower))
-                        players.Add(lower, (StoneType)players.Count);
+                        players.Add(lower, new StoneType(players.Count));
                     cells.Add(new Cell(new Position(x, y), (StoneType)players[lower]));
                     x++;
                 }
@@ -43,7 +43,7 @@ namespace Othello.Business.Domain.Utils
                     x++;
                 }
             }
-            return new Game(new Board(cells), players[turn], (StoneType)(players.Max(p => (int)p.Value)));
+            return new Game(new Board(cells), players[turn], players.Count);
         }
     }
 }

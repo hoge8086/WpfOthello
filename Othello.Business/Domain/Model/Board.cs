@@ -24,33 +24,33 @@ namespace Othello.Business.Domain.Model
             
         }
 
-        public Board()
-        {
-            Width = 8;
-            Height = 8;
+        //public Board()
+        //{
+        //    Width = 8;
+        //    Height = 8;
 
-            //セル作成
-            cells = new Dictionary<Position, Cell>();
-            for(int y=0; y<Height; y++)
-            {
-                for(int x=0; x<Width; x++)
-                {
-                    var pos = new Position(x, y);
-                    cells.Add(pos, new Model.Cell(pos, null));
-                }
-            }
+        //    //セル作成
+        //    cells = new Dictionary<Position, Cell>();
+        //    for(int y=0; y<Height; y++)
+        //    {
+        //        for(int x=0; x<Width; x++)
+        //        {
+        //            var pos = new Position(x, y);
+        //            cells.Add(pos, new Model.Cell(pos, null));
+        //        }
+        //    }
 
-            //初期配置
-            try{
-                Cell(new Position(Width / 2 - 1, Height / 2 - 1)).PutStone(StoneType.Player1);
-                Cell(new Position(Width / 2, Height / 2)).PutStone(StoneType.Player1);
-                Cell(new Position(Width / 2 - 1, Height / 2)).PutStone(StoneType.Player2);
-                Cell(new Position(Width / 2, Height / 2 - 1)).PutStone(StoneType.Player2);
-            }catch
-            {
-                throw new InvalidProgramException("Initialize borad failed.");
-            }
-        }
+        //    //初期配置
+        //    try{
+        //        Cell(new Position(Width / 2 - 1, Height / 2 - 1)).PutStone(StoneType.Player1);
+        //        Cell(new Position(Width / 2, Height / 2)).PutStone(StoneType.Player1);
+        //        Cell(new Position(Width / 2 - 1, Height / 2)).PutStone(StoneType.Player2);
+        //        Cell(new Position(Width / 2, Height / 2 - 1)).PutStone(StoneType.Player2);
+        //    }catch
+        //    {
+        //        throw new InvalidProgramException("Initialize borad failed.");
+        //    }
+        //}
 
         /// <summary>
         /// セルを返す
@@ -93,19 +93,19 @@ namespace Othello.Business.Domain.Model
             return GetAllCells().Count(cell => cell.Stone == stoneType);
         }
 
-        public Dictionary<StoneType, int> CountStones(StoneType stoneTypeMax)
+        public Dictionary<StoneType, int> CountStones(StoneTypes stoneTypes)
         {
             Dictionary<StoneType, int> counter = new Dictionary<StoneType, int>();
-            for(int i= (int)StoneType.Player1; i<=(int)stoneTypeMax; i++)
+            foreach(var stoneType in stoneTypes.Types)
             {
-                counter.Add((StoneType)i, CountStone((StoneType)i));
+                counter.Add(stoneType, CountStone(stoneType));
             }
             return counter;
         }
 
-        public List<StoneType> CalcMostStoneTypes(StoneType lastStoneType)
+        public List<StoneType> CalcMostStoneTypes(StoneTypes stoneTypes)
         {
-            Dictionary<StoneType, int> counter = CountStones(lastStoneType);
+            Dictionary<StoneType, int> counter = CountStones(stoneTypes);
             int maxCount = counter.OrderBy(x => x.Value).First().Value;
             return counter.Where(x => x.Value >= maxCount).Select(x => x.Key).ToList();
         }

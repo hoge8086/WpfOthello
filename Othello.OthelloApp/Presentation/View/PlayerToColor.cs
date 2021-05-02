@@ -10,22 +10,22 @@ namespace Othello.OthelloApp.Presentation.View
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var type = value as StoneType?;
-            if (type == StoneType.Player1)
+            var type = value as StoneType;
+            if (type.Id == 0)
                 return Brushes.Black.Color;
-            if (type == StoneType.Player2)
+            if (type.Id == 1)
                 return Brushes.White.Color;
-            if (type == StoneType.Player3)
+            if (type.Id == 2)
                 return Brushes.Red.Color;
-            if (type == StoneType.Player4)
+            if (type.Id == 3)
                 return Brushes.Yellow.Color;
-            if (type == StoneType.Player5)
+            if (type.Id == 4)
                 return Brushes.Green.Color;
-            if (type == StoneType.Player6)
+            if (type.Id == 5)
                 return Brushes.Blue.Color;
-            if (type == StoneType.Player7)
+            if (type.Id == 6)
                 return Brushes.Peru.Color;
-            if (type == StoneType.Player8)
+            if (type.Id == 7)
                 return Brushes.Gold.Color;
 
             return Brushes.Plum.Color;

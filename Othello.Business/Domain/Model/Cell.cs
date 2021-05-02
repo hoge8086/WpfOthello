@@ -11,10 +11,10 @@ namespace Othello.Business.Domain.Model
         public Position Position { get; private set; }
 
         //石が置いてない場合はnull
-        public StoneType? Stone { get; private set; }
+        public StoneType Stone { get; private set; }
         public bool IsEmpty() { return Stone == null; }
 
-        public Cell(Position position, StoneType? putStone = null)
+        public Cell(Position position, StoneType putStone = null)
         {
             this.Position = position;
             this.Stone = putStone;
