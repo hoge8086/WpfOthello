@@ -90,7 +90,7 @@ namespace Othello.Business.Domain.Model
 
         private int CountStone(StoneType stoneType)
         {
-            return GetAllCells().Count(cell => cell.Stone == stoneType);
+            return GetAllCells().Count(cell => stoneType.Equals(cell.Stone));
         }
 
         public Dictionary<StoneType, int> CountStones(StoneTypes stoneTypes)

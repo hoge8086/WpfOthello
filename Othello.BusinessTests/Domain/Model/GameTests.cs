@@ -58,8 +58,7 @@ namespace Othello.Business.Domain.Model.Tests
             var game = new OthelloBoardFactoryFromString().Create(borad, 'b', out players);
             game.PutStone(new Position(2, 0), players['b']);
             game.Board.ShowDebug();
-            Assert.AreEqual(false, game.IsEnd);
-            Assert.AreEqual(players['b'], game.CurrentTurn);
+            Assert.AreEqual(true, game.IsEnd);
         }
     }
 }

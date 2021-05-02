@@ -38,7 +38,7 @@ namespace Othello.Business.Domain.Model
             if (IsEnd)
                 throw new InvalidOperationException("This game is finished.");
 
-            if (CurrentTurn != putStoneType)
+            if (!CurrentTurn.Equals(putStoneType))
                 throw new InvalidOperationException("Not your turn.");
 
             if (!HasReversiableStone(putPosition, putStoneType))
@@ -56,18 +56,18 @@ namespace Othello.Business.Domain.Model
 
         private void FowardTurn()
         {
-            var nextTurn = StoneTypes.Next(CurrentTurn);
-
+            StoneType nextTurn = null;
             do
             {
+                nextTurn = StoneTypes.Next(CurrentTurn);
+
                 if (CanPutSomewhare(nextTurn))
                 {
                     CurrentTurn = nextTurn;
                     return;
                 }
-                nextTurn = StoneTypes.Next(nextTurn);
 
-            } while (nextTurn != StoneTypes.Next(CurrentTurn));
+            } while (!nextTurn.Equals(nextTurn));
 
             Result = CreateGameResult();
         }
