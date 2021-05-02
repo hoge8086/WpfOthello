@@ -99,6 +99,14 @@ namespace Othello.Business.Domain.Utils
                 "____a      b__\n" +
                 "____edcbaedc__\n" +
                 "______________\n"
+            },
+            new InnerBoardInfo()
+            {
+                boardType=OthelloBoardType.Board5,
+                first='a',
+                board=
+                "_ab_\n" +
+                "____\n"
             }
         };
 

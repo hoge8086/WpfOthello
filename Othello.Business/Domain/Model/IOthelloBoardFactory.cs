@@ -26,6 +26,7 @@ namespace Othello.Business.Domain.Model
         Board2,
         Board3,
         Board4,
+        Board5,
     }
 
 }

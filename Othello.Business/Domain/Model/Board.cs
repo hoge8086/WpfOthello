@@ -124,15 +124,15 @@ namespace Othello.Business.Domain.Model
                     var cell = Cell(new Position(x, y));
 
                     if (cell == null)
-                        Console.Write(" ");
+                        System.Diagnostics.Debug.Write(" ");
                     else if(cell.Stone != null)
-                        Console.Write(cell.Stone?.GetChar());
+                        System.Diagnostics.Debug.Write(cell.Stone?.GetChar());
                     else
-                        Console.Write("_");
+                        System.Diagnostics.Debug.Write("_");
 
-                    Console.Write(" ");
+                    System.Diagnostics.Debug.Write(" ");
                 }
-                Console.WriteLine();
+                System.Diagnostics.Debug.WriteLine("");
             }
         }
     }

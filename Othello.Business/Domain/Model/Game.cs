@@ -56,18 +56,18 @@ namespace Othello.Business.Domain.Model
 
         private void FowardTurn()
         {
-            StoneType nextTurn = null;
+            StoneType turn = CurrentTurn;
             do
             {
-                nextTurn = StoneTypes.Next(CurrentTurn);
+                turn = StoneTypes.Next(turn);
 
-                if (CanPutSomewhare(nextTurn))
+                if (CanPutSomewhare(turn))
                 {
-                    CurrentTurn = nextTurn;
+                    CurrentTurn = turn;
                     return;
                 }
 
-            } while (!nextTurn.Equals(nextTurn));
+            } while (!turn.Equals(CurrentTurn));
 
             Result = CreateGameResult();
         }
