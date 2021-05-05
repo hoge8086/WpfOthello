@@ -2,7 +2,7 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
-using Othello.Business.Domain.Model;
+using Othello.Business.Domain.Model.Games;
 
 namespace Othello.OthelloApp.Presentation.View
 {

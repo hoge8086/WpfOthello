@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Othello.Business.Domain.Model
+namespace Othello.Business.Domain.Model.Games
 {
 
     public class Game
@@ -33,7 +33,7 @@ namespace Othello.Business.Domain.Model
         //    Result = null;
         //}
 
-        public void PutStone(Position putPosition, StoneType putStoneType)
+        public void PutStone(Board.IPosition putPosition, StoneType putStoneType)
         {
             if (IsEnd)
                 throw new InvalidOperationException("This game is finished.");
@@ -94,19 +94,19 @@ namespace Othello.Business.Domain.Model
             return cells;
         }
 
-        private void Reverse(Position putPosition, StoneType putStoneType)
+        private void Reverse(Board.IPosition putPosition, StoneType putStoneType)
         {
             new SandwichStoneTracer(Board).Trace( putPosition,
                                                   putStoneType,
                                                   (c) => { c.ChangeToMyStoneType(putStoneType); });
         }
 
-        private bool HasReversiableStone(Position putPosition, StoneType putStoneType)
+        private bool HasReversiableStone(Board.IPosition putPosition, StoneType putStoneType)
         {
             return CountReversiableStones(putPosition, putStoneType) > 0;
         }
 
-        private int CountReversiableStones(Position putPosition, StoneType putStoneType)
+        private int CountReversiableStones(Board.IPosition putPosition, StoneType putStoneType)
         {
             int count = 0;
             new SandwichStoneTracer(Board).Trace(putPosition,

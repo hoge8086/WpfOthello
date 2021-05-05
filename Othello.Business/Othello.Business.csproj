@@ -41,14 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationService\OthelloApplicationService.cs" />
-    <Compile Include="Domain\Model\Board.cs" />
-    <Compile Include="Domain\Model\Cell.cs" />
-    <Compile Include="Domain\Model\Game.cs" />
-    <Compile Include="Domain\Model\GameResult.cs" />
-    <Compile Include="Domain\Model\IOthelloBoardFactory.cs" />
-    <Compile Include="Domain\Model\Position.cs" />
-    <Compile Include="Domain\Model\StoneType.cs" />
-    <Compile Include="Domain\Model\SandwichStoneTracer.cs" />
+    <Compile Include="Domain\Model\Boards\XYBoard.cs" />
+    <Compile Include="Domain\Model\Games\Board.cs" />
+    <Compile Include="Domain\Model\Games\Cell.cs" />
+    <Compile Include="Domain\Model\Games\Game.cs" />
+    <Compile Include="Domain\Model\Games\GameResult.cs" />
+    <Compile Include="Domain\Model\Games\IOthelloBoardFactory.cs" />
+    <Compile Include="Domain\Model\Games\StoneType.cs" />
+    <Compile Include="Domain\Model\Games\SandwichStoneTracer.cs" />
     <Compile Include="Domain\Utils\OthelloBoardFactoryFromString.cs" />
     <Compile Include="Domain\Utils\OthelloBoardFactoryImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

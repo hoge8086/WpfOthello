@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Othello.Business.Domain.Model
+namespace Othello.Business.Domain.Model.Games
 {
     public class Cell
     {
-        public Position Position { get; private set; }
+        public Board.IPosition Position { get; private set; }
 
         //石が置いてない場合はnull
         public StoneType Stone { get; private set; }
         public bool IsEmpty() { return Stone == null; }
 
-        public Cell(Position position, StoneType putStone = null)
+        public Cell(Board.IPosition position, StoneType putStone = null)
         {
             this.Position = position;
             this.Stone = putStone;

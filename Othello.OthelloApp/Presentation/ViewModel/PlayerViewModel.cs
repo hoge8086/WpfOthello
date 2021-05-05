@@ -1,4 +1,4 @@
-﻿using Othello.Business.Domain.Model;
+﻿using Othello.Business.Domain.Model.Games;
 
 namespace Othello.OthelloApp.Presentation.ViewModel
 {

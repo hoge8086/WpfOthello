@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Othello.Business.Domain.Model;
+using Othello.Business.Domain.Model.Games;
+using Othello.Business.Domain.Model.Boards;
 
 namespace Othello.Business.Domain.Utils
 {
@@ -34,16 +35,16 @@ namespace Othello.Business.Domain.Utils
                 {
                     if (!players.ContainsKey(lower))
                         players.Add(lower, new StoneType(players.Count));
-                    cells.Add(new Cell(new Position(x, y), (StoneType)players[lower]));
+                    cells.Add(new Cell(new XYPosition(x, y), (StoneType)players[lower]));
                     x++;
                 }
                 else if (lower == '_')
                 {
-                    cells.Add(new Cell(new Position(x, y), null));
+                    cells.Add(new Cell(new XYPosition(x, y), null));
                     x++;
                 }
             }
-            return new Game(new Board(cells), players[turn], players.Count);
+            return new Game(new XYBoard(cells), players[turn], players.Count);
         }
     }
 }

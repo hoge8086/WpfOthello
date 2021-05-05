@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Othello.Business.Domain.Model;
+using Othello.Business.Domain.Model.Games;
 
 namespace Othello.Business.Domain.Utils
 {

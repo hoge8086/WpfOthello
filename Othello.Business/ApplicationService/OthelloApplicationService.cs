@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Othello.Business.Domain.Model;
+using Othello.Business.Domain.Model.Games;
 using Othello.Business.Domain.Utils;
+
 
 namespace Othello.Business.ApplicationService
 {
@@ -26,9 +27,9 @@ namespace Othello.Business.ApplicationService
             currentBoardType = selected;
         }
 
-        public void PutStone(int x, int y, StoneType stone)
+        public void PutStone(Board.IPosition pos, StoneType stone)
         {
-            game.PutStone(new Position(x, y), stone);
+            game.PutStone(pos, stone);
             game.Board.ShowDebug();
         }
 

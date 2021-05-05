@@ -1,12 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-
+using System.IO;
 using Othello.Business.ApplicationService;
-using Othello.Business.Domain.Model;
+using Othello.Business.Domain.Model.Boards;
+using Othello.Business.Domain.Model.Games;
 
 namespace Othello.OthelloApp.Presentation.ViewModel
 {
-    public class OthelloBoardCtrlViewModel : INotifyPropertyChanged
+    public class XYBoardViewModel : IBoardViewModel //: INotifyPropertyChanged
     {
         private OthelloApplicationService service = null;
 
@@ -22,14 +23,14 @@ namespace Othello.OthelloApp.Presentation.ViewModel
         public StoneType CurrentPlayer { get; set; }
 
         //VisualBrush生成用のビューモデルコンストラクタ
-        public OthelloBoardCtrlViewModel(Game game)
+        public XYBoardViewModel(Game game)
         {
             Board = new ObservableCollection<ObservableCollection<CellViewModel>>();
             Update(game);
         }
 
         //コンストラクタ
-        public OthelloBoardCtrlViewModel(OthelloApplicationService service)
+        public XYBoardViewModel(OthelloApplicationService service)
         {
             this.service = service;
             PutStoneCommand = new DelegateCommand(
@@ -37,19 +38,21 @@ namespace Othello.OthelloApp.Presentation.ViewModel
                         var cell = param as CellViewModel;
                         if (cell == null)
                             return;
-                        service.PutStone(cell.X, cell.Y, CurrentPlayer);
+                        //service.PutStone(cell.X, cell.Y, CurrentPlayer);
+                        service.PutStone(cell.Position, CurrentPlayer);
                         Update();
                     },
                     (param) => {
                         var cell = param as CellViewModel;
                         if (cell == null)
                             return false;
+                        var pos = cell.Position as XYPosition; 
 
-                        if(cell.Y < 0 || Board.Count <= cell.Y ||
-                           cell.X < 0 || Board[cell.Y].Count <= cell.X)
+                        if(pos.Y < 0 || Board.Count <= pos.Y ||
+                           pos.X < 0 || Board[pos.Y].Count <= pos.X)
                             return false;
 
-                        return Board[cell.Y][cell.X].CellType == CellType.EmptyAndCanPut;
+                        return Board[pos.Y][pos.X].CellType == CellType.EmptyAndCanPut;
                     }
                 );
 
@@ -70,28 +73,38 @@ namespace Othello.OthelloApp.Presentation.ViewModel
 
             //更新
             Board.Clear();
-            for(int y=0; y<game.Board.Height; y++)
+
+            var board = game.Board as XYBoard;
+
+            if (board == null)
+                throw new InvalidDataException("Board type mismatch.");
+
+            for(int y=0; y<board.Height; y++)
             {
                 var row = new ObservableCollection<CellViewModel>();
-                for (int x = 0; x<game.Board.Width; x++)
-                    row.Add(new CellViewModel() { CellType=CellType.NotCell, X=x, Y=y});
+                for (int x = 0; x<board.Width; x++)
+                    row.Add(new CellViewModel() { CellType=CellType.NotCell, Position = new XYPosition(x,y)});
+                    //row.Add(new CellViewModel() { CellType=CellType.NotCell, X=x, Y=y});
                 Board.Add(row);
             }
 
-            foreach(var cell in game.Board.GetAllCells())
+            foreach(var cell in board.GetAllCells())
             {
+                var pos = cell.Position as XYPosition;
+                
                 if(cell.Stone == null)
-                    Board[cell.Position.Y][cell.Position.X].CellType = CellType.Empty;
+                    Board[pos.Y][pos.X].CellType = CellType.Empty;
                 else
                 {
-                    Board[cell.Position.Y][cell.Position.X].CellType = CellType.PutStone;
-                    Board[cell.Position.Y][cell.Position.X].StoneType = cell.Stone;
+                    Board[pos.Y][pos.X].CellType = CellType.PutStone;
+                    Board[pos.Y][pos.X].StoneType = cell.Stone;
                 }
             }
 
             foreach(var cell in game.GetCanPutCellsOfCurrentTurn())
             {
-                Board[cell.Position.Y][cell.Position.X].CellType = CellType.EmptyAndCanPut;
+                var pos = cell.Position as XYPosition;
+                Board[pos.Y][pos.X].CellType = CellType.EmptyAndCanPut;
             }
 
             CurrentPlayer = game.CurrentTurn;

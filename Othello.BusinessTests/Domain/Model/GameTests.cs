@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Othello.Business.Domain.Model;
+using Othello.Business.Domain.Model.Games;
+using Othello.Business.Domain.Model.Boards;
 using Othello.Business.Domain.Utils;
 using System;
 using System.Collections.Generic;
@@ -25,13 +26,13 @@ namespace Othello.Business.Domain.Model.Tests
             var game = new OthelloBoardFactoryFromString().Create(borad, 'a', out players);
 
             game.Board.ShowDebug();
-            game.PutStone(new Position(0, 2), players['a']);
+            game.PutStone(new XYPosition(0, 2), players['a']);
             game.Board.ShowDebug();
-            game.PutStone(new Position(0, 3), players['b']);
+            game.PutStone(new XYPosition(0, 3), players['b']);
             game.Board.ShowDebug();
-            game.PutStone(new Position(3, 1), players['a']);
+            game.PutStone(new XYPosition(3, 1), players['a']);
             game.Board.ShowDebug();
-            game.PutStone(new Position(0, 1), players['b']);
+            game.PutStone(new XYPosition(0, 1), players['b']);
             game.Board.ShowDebug();
         }
         [TestMethod()]
@@ -43,7 +44,7 @@ namespace Othello.Business.Domain.Model.Tests
 
             Dictionary<char, StoneType> players;
             var game = new OthelloBoardFactoryFromString().Create(borad, 'b', out players);
-            game.PutStone(new Position(1, 0), players['b']);
+            game.PutStone(new XYPosition(1, 0), players['b']);
             game.Board.ShowDebug();
             Assert.AreEqual(true, game.IsEnd);
         }
@@ -56,7 +57,7 @@ namespace Othello.Business.Domain.Model.Tests
 
             Dictionary<char, StoneType> players;
             var game = new OthelloBoardFactoryFromString().Create(borad, 'b', out players);
-            game.PutStone(new Position(2, 0), players['b']);
+            game.PutStone(new XYPosition(2, 0), players['b']);
             game.Board.ShowDebug();
             Assert.AreEqual(false, game.IsEnd); // [0,0]における
         }

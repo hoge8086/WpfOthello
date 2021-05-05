@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Othello.Business.Domain.Model
+namespace Othello.Business.Domain.Model.Games
 {
     public class StoneTypes
     {

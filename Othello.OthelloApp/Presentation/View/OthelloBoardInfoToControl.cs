@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using Othello.Business.Domain.Model;
+using Othello.Business.Domain.Model.Games;
 using System.Windows.Media;
 using Othello.OthelloApp.Presentation.ViewModel;
 
@@ -17,7 +17,7 @@ namespace Othello.OthelloApp.Presentation.View
 
             var brush = new VisualBrush();
             var boardCtrl = new OthelloBoardCtrl();
-            boardCtrl.DataContext = new OthelloBoardCtrlViewModel(info.Game);
+            boardCtrl.DataContext = new XYBoardViewModel(info.Game);
             return boardCtrl;
         }
 

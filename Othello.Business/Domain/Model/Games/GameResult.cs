@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Othello.Business.Domain.Model
+namespace Othello.Business.Domain.Model.Games
 {
     public class GameResult
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Othello.Business.Domain.Model
+namespace Othello.Business.Domain.Model.Games
 {
     public class SandwichStoneTracer
     {
@@ -17,19 +17,19 @@ namespace Othello.Business.Domain.Model
 
         public delegate void ActionForSandwichedStoneDelegate(Cell cell);
 
-        public void Trace(Position position, StoneType putStoneType, ActionForSandwichedStoneDelegate action)
+        public void Trace(Board.IPosition position, StoneType putStoneType, ActionForSandwichedStoneDelegate action)
         {
             if (position == null || action == null)
                 throw new ArgumentException();
 
-            foreach(var dir in Position.Direction.AllDirections)
+            foreach(var dir in board.Directions)
             {
                 var neighberCell = board.GetNeighberCell(position, dir);
                 TraceSub(neighberCell, putStoneType, dir, action);
             }
         }
 
-        private bool TraceSub(Cell tracingCell, StoneType putStoneType, Position.Direction dir, ActionForSandwichedStoneDelegate action)
+        private bool TraceSub(Cell tracingCell, StoneType putStoneType, Board.IDirection dir, ActionForSandwichedStoneDelegate action)
         {
             if (tracingCell == null)
                 return false;

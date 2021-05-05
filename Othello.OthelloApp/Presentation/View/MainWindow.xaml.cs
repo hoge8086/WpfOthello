@@ -9,7 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Othello.Business.Domain.Model;
+using Othello.Business.Domain.Model.Games;
 using Othello.OthelloApp.Presentation.ViewModel;
 
 namespace Othello.OthelloApp.Presentation.View
@@ -39,11 +39,9 @@ namespace Othello.OthelloApp.Presentation.View
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             var win = new SelectBoardWindow(vm.RestartGameCommand);
-            //var win = new SelectBoardWindow(vm._RestartGameCommand);
             win.Owner = this;
             win.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             win.ShowDialog();
-
         }
     }
 }

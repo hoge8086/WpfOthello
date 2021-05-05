@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Othello.OthelloApp.Presentation.View"
-        xmlns:model ="clr-namespace:Othello.Business.Domain.Model;assembly=Othello.Business"
+        xmlns:model ="clr-namespace:Othello.Business.Domain.Model.Games;assembly=Othello.Business"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="ボード選択" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
