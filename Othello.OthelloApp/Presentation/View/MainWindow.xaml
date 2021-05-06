@@ -69,7 +69,17 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
         <!--ボード-->
-        <local:OthelloBoardCtrl x:Name="board" Grid.Row="2" DataContext="{Binding Board}" HorizontalAlignment="Center"/>
+        <ContentControl Grid.Row="2" DataContext="{Binding Board}" HorizontalAlignment="Center" Content="{Binding}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type vm:XYBoardViewModel}">
+                    <local:OthelloBoardCtrl x:Name="board" />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:HexagonalBoardViewModel}">
+                    <local:HexagonalOthelloBoardCtrl x:Name="board" />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+        <!--<local:OthelloBoardCtrl x:Name="board" Grid.Row="2" DataContext="{Binding Board}" HorizontalAlignment="Center"/>-->
     </Grid>
     <Window.DataContext>
         <vm:MainWindowViewModel/>

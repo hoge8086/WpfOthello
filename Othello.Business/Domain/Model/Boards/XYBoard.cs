@@ -25,7 +25,6 @@ namespace Othello.Business.Domain.Model.Boards
                             };
     }
 
-
     public class XYPosition : Board.IPosition
     {
         public int X { get; private set; }

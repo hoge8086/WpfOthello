@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationService\OthelloApplicationService.cs" />
+    <Compile Include="Domain\Model\Boards\HexagonalBoard.cs" />
     <Compile Include="Domain\Model\Boards\XYBoard.cs" />
     <Compile Include="Domain\Model\Games\Board.cs" />
     <Compile Include="Domain\Model\Games\Cell.cs" />

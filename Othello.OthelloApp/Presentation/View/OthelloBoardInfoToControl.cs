@@ -4,6 +4,8 @@ using System.Windows.Data;
 using Othello.Business.Domain.Model.Games;
 using System.Windows.Media;
 using Othello.OthelloApp.Presentation.ViewModel;
+using Othello.Business.Domain.Model.Boards;
+using System.Windows.Controls;
 
 namespace Othello.OthelloApp.Presentation.View
 {
@@ -16,8 +18,17 @@ namespace Othello.OthelloApp.Presentation.View
                 return null;
 
             var brush = new VisualBrush();
-            var boardCtrl = new OthelloBoardCtrl();
-            boardCtrl.DataContext = new XYBoardViewModel(info.Game);
+            UserControl boardCtrl = null;// new OthelloBoardCtrl();
+            if(info.Game.Board is XYBoard)
+            {
+                boardCtrl = new OthelloBoardCtrl(); 
+                boardCtrl.DataContext = new XYBoardViewModel(info.Game);
+            }
+            else if(info.Game.Board is HexagonalBoard)
+            {
+                boardCtrl = new HexagonalOthelloBoardCtrl(); 
+                boardCtrl.DataContext = new HexagonalBoardViewModel(info.Game);
+            }
             return boardCtrl;
         }
 

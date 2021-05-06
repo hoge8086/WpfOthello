@@ -11,12 +11,20 @@ namespace Othello.Business.Domain.Utils
 {
     public class OthelloBoardFactoryFromString
     {
+        protected virtual Board CreateBoard(List<Cell> cells)
+        {
+            return new XYBoard(cells);
+
+        }
+        protected virtual Board.IPosition CreatePosition(int x, int y)
+        {
+            return new XYPosition(x, y);
+        }
         public Game Create(string textBoard, char turn, out Dictionary<char, StoneType> players)
         {
             int x = 0;
             int y = 0;
             List<Cell> cells = new List<Cell>();
-            //Dictionary<char, int> players = new Dictionary<char, StoneType>();
             players = new Dictionary<char, StoneType>();
             foreach (var c in textBoard)
             {
@@ -35,16 +43,30 @@ namespace Othello.Business.Domain.Utils
                 {
                     if (!players.ContainsKey(lower))
                         players.Add(lower, new StoneType(players.Count));
-                    cells.Add(new Cell(new XYPosition(x, y), (StoneType)players[lower]));
+                    cells.Add(new Cell(CreatePosition(x, y), (StoneType)players[lower]));
                     x++;
                 }
                 else if (lower == '_')
                 {
-                    cells.Add(new Cell(new XYPosition(x, y), null));
+                    cells.Add(new Cell(CreatePosition(x, y), null));
                     x++;
                 }
             }
-            return new Game(new XYBoard(cells), players[turn], players.Count);
+            return new Game(CreateBoard(cells), players[turn], players.Count);
+
+            throw new NotImplementedException("This board type is not implemented.");
+        }
+    }
+    public class HexagonalOthelloBoardFactoryFromString : OthelloBoardFactoryFromString
+    {
+        protected override Board CreateBoard(List<Cell> cells)
+        {
+            return new HexagonalBoard(cells);
+
+        }
+        protected override Board.IPosition CreatePosition(int x, int y)
+        {
+            return new HexagonalPosition(x, y);
         }
     }
 }

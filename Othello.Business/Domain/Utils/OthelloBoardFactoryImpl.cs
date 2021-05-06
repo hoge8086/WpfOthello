@@ -8,6 +8,12 @@ using Othello.Business.Domain.Model.Games;
 
 namespace Othello.Business.Domain.Utils
 {
+    public enum BoardFormType
+    {
+        XY,
+        Hexagonal,
+    }
+
     public class OthelloBoardFactoryImpl : IOthelloBoardFactory
     {
         public BoardInfo Create(OthelloBoardType boardType)
@@ -15,7 +21,13 @@ namespace Othello.Business.Domain.Utils
             var info = tbl.FirstOrDefault(x => x.boardType == boardType);
             if (info == null)
                 throw new NotImplementedException("That othello board is not implemented.");
-            var factory = new OthelloBoardFactoryFromString();
+
+            OthelloBoardFactoryFromString factory = null;
+            if(info.formType == BoardFormType.Hexagonal)
+                factory = new HexagonalOthelloBoardFactoryFromString();
+            else if(info.formType == BoardFormType.XY)
+                factory = new OthelloBoardFactoryFromString();
+
             Dictionary<char, StoneType> players;
             var game = factory.Create(info.board, info.first, out players);
 
@@ -27,13 +39,19 @@ namespace Othello.Business.Domain.Utils
             throw new NotImplementedException();
         }
 
-        private class InnerBoardInfo { public OthelloBoardType boardType; public string board; public char first;}
+        private class InnerBoardInfo {
+            public OthelloBoardType boardType;
+            public string board;
+            public char first;
+            public BoardFormType formType;
+        }
 
         private InnerBoardInfo[] tbl = new InnerBoardInfo[]
         {
             new InnerBoardInfo()
             {
                 boardType=OthelloBoardType.Standard,
+                formType = BoardFormType.XY,
                 first='a',
                 board=
                 "________\n" +
@@ -48,6 +66,7 @@ namespace Othello.Business.Domain.Utils
             new InnerBoardInfo()
             {
                 boardType=OthelloBoardType.Board1,
+                formType = BoardFormType.XY,
                 first='a',
                 board=
                 "____\n" +
@@ -58,6 +77,7 @@ namespace Othello.Business.Domain.Utils
             new InnerBoardInfo()
             {
                 boardType=OthelloBoardType.Board2,
+                formType = BoardFormType.XY,
                 first='a',
                 board=
                 "____\n" +
@@ -72,6 +92,7 @@ namespace Othello.Business.Domain.Utils
             new InnerBoardInfo()
             {
                 boardType=OthelloBoardType.Board3,
+                formType = BoardFormType.XY,
                 first='a',
                 board=
                 "  _________  \n" +
@@ -85,28 +106,32 @@ namespace Othello.Business.Domain.Utils
             new InnerBoardInfo()
             {
                 boardType=OthelloBoardType.Board4,
+                formType = BoardFormType.Hexagonal,
                 first='a',
                 board=
-                "   ______________\n" +
-                "   ______________\n" +
-                "   ______________\n" +
-                "____bcdeabca_____\n" +
-                "____a      b_____\n" +
-                "____e      c_____\n" +
-                "____d      d_____\n" +
-                "____c      e_____\n" +
-                "____b      a__\n" +
-                "____a      b__\n" +
-                "____edcbaedc__\n" +
-                "______________\n"
+                "____\n" +
+                "_ab_\n" +
+                "_ba_\n" +
+                "____\n"
+                //"   ____  \n" +
+                //"  ______\n" +
+                //" ___a___\n" +
+                //"___bbb__\n" +
+                //" ___a___\n" +
+                //"  ______\n" +
+                //"   ____  \n"
             },
             new InnerBoardInfo()
             {
                 boardType=OthelloBoardType.Board5,
+                formType = BoardFormType.Hexagonal,
                 first='a',
                 board=
+                " ___\n" +
                 "_ab_\n" +
-                "____\n"
+                "_bac_\n" +
+                "_c__\n" +
+                " ___\n"
             }
         };
 

@@ -71,6 +71,11 @@ namespace Othello.OthelloApp.Presentation.ViewModel
             {
                 return new XYBoardViewModel(service);
             }
+            else if (service.GetGame().Board is HexagonalBoard)
+            {
+                return new HexagonalBoardViewModel(service);
+            }
+  
             throw new NotImplementedException("This board type is not implemented.");
         }
 

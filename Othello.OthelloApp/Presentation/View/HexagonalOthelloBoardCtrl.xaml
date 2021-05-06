@@ -1,0 +1,134 @@
+﻿<UserControl x:Class="Othello.OthelloApp.Presentation.View.HexagonalOthelloBoardCtrl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Othello.OthelloApp.Presentation.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <!--オセロボード-->
+    <UserControl.Resources>
+    </UserControl.Resources>
+    <ItemsControl x:Name="board"
+                  ItemsSource="{Binding Board}"
+                  Margin="5"
+                  AlternationCount="2">
+        <ItemsControl.Template>
+            <ControlTemplate>
+                <Border BorderThickness="12" CornerRadius="8" BorderBrush="DarkRed" Background="DarkRed" Padding="0,0,0,16">
+                    <ItemsPresenter/>
+                </Border>
+            </ControlTemplate>
+        </ItemsControl.Template>
+        <ItemsControl.ItemsPanel>
+            <!--行-->
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Vertical"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <!--1行の中の列-->
+                <ItemsControl x:Name="row" ItemsSource="{Binding}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel x:Name="row" Orientation="Horizontal" HorizontalAlignment="Left">
+                            </StackPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <!--セルの定義(ボタン)-->
+                            <Button x:Name="button" Background="LimeGreen" BorderBrush="Black"
+                                    Command="{Binding Path=DataContext.PutStoneCommand, ElementName=board}"
+                                    local:ButtonHelper.CommandParameter="{Binding .}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <!--背景-->
+                                        <Grid>
+                                            <Polygon Points=
+                                                    "25.98076211,60
+                                                    51.96152423,45
+                                                    51.96152423,15
+                                                    25.98076211,0
+                                                    0,15
+                                                    0,45"
+                                                    Fill="{TemplateBinding Background}"
+                                                    StrokeThickness=".75"
+                                                    Stroke="{TemplateBinding BorderBrush}" />
+                                            <ContentPresenter/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <!--石(デフォは非表示)-->
+                                <Grid>
+                                    <!--置いてあるとき-->
+                                    <local:OthelloStone x:Name="stone" Height="42" Width="42" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
+                                    <!--置けるとき-->
+                                    <Ellipse x:Name="ellipse"  Height="42" Width="42" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"
+                                            StrokeDashArray="2,2"
+                                            StrokeThickness="3">
+                                        <Ellipse.Stroke>
+                                            <SolidColorBrush Color="{Binding DataContext.CurrentPlayer, ElementName=board, Converter={StaticResource playerToColor}}"/>
+                                        </Ellipse.Stroke>
+                                    </Ellipse>
+                                </Grid>
+                            </Button>
+                            <!--データトリガーを使用し、セルの状態で見せ方を変える-->
+                            <DataTemplate.Triggers>
+                                <!--【セルではない空間】-->
+                                <DataTrigger Binding="{Binding CellType}" Value="NotCell">
+                                    <!--セル背景を茶色にする-->
+                                    <Setter TargetName="button" Property="Background" Value="Transparent"/>
+                                    <Setter TargetName="button" Property="BorderBrush" Value="Transparent"/>
+                                </DataTrigger>
+                                <!--【空のセル】-->
+                                <DataTrigger Binding="{Binding CellType}" Value="Empty">
+                                    <!--デフォが空のセルなので特に設定は不要-->
+                                </DataTrigger>
+                                <!--【空で置けるセル】-->
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding CellType}" Value="EmptyAndCanPut"/>
+                                        <Condition Binding="{Binding ElementName=button, Path=IsMouseOver}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <!--点線を表示する-->
+                                    <Setter TargetName="ellipse" Property="Visibility" Value="Visible"/>
+                                </MultiDataTrigger>
+                                <!--【空で置けるセル(マウスオーバー時)】-->
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding CellType}" Value="EmptyAndCanPut"/>
+                                        <Condition Binding="{Binding ElementName=button, Path=IsMouseOver}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <!--石を表示して現在のプレイヤーの色で塗る-->
+                                    <Setter TargetName="stone" Property="Color" Value="{Binding DataContext.CurrentPlayer, ElementName=board, Converter={StaticResource playerToColor}}"/>
+                                    <Setter TargetName="stone" Property="Visibility" Value="Visible"/>
+                                </MultiDataTrigger>
+                                <!--【石が置いてあるセル】-->
+                                <DataTrigger Binding="{Binding CellType}" Value="PutStone">
+                                    <!--石を表示して所有するプレイヤーの色で塗る-->
+                                    <Setter TargetName="stone" Property="Color" Value="{Binding StoneType, Converter={StaticResource playerToColor}}"/>
+                                    <Setter TargetName="stone" Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <!-- 奇数行はずらす -->
+                <DataTemplate.Triggers>
+                    <!-- 偶数行 -->
+                    <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                      <Setter TargetName="row" Property="Margin" Value="0,0,0,-16" />
+
+                    </Trigger>
+                    <!-- 奇数行 -->        
+                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                        <Setter TargetName="row" Property="Margin" Value="25,0,0,-16" />
+                    </Trigger>
+                </DataTemplate.Triggers>
+
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>
