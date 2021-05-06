@@ -9,26 +9,22 @@ namespace Othello.Business.Domain.Model.Boards
 {
     public class HexagonalDirection : Board.IDirection
     {
-        public enum InnerHexagonalDirection
-        {
-            Right,
-            Left,
-            RightUp,
-            LeftUp,
-            RightDown,
-            LeftDown,
-        }
-        public InnerHexagonalDirection Direction;
-        private HexagonalDirection(InnerHexagonalDirection dir) { this.Direction = dir; }
+        public static readonly HexagonalDirection Right     = new HexagonalDirection();
+        public static readonly HexagonalDirection Left      = new HexagonalDirection();
+        public static readonly HexagonalDirection RightUp   = new HexagonalDirection();
+        public static readonly HexagonalDirection LeftUp    = new HexagonalDirection();
+        public static readonly HexagonalDirection RightDown = new HexagonalDirection();
+        public static readonly HexagonalDirection LeftDown  = new HexagonalDirection();
+        private HexagonalDirection() {}
 
         public static readonly List<HexagonalDirection> AllDirections = new List<HexagonalDirection>()
                             {
-                                new HexagonalDirection(InnerHexagonalDirection.Right),
-                                new HexagonalDirection(InnerHexagonalDirection.Left),
-                                new HexagonalDirection(InnerHexagonalDirection.RightUp),
-                                new HexagonalDirection(InnerHexagonalDirection.LeftUp),
-                                new HexagonalDirection(InnerHexagonalDirection.RightDown),
-                                new HexagonalDirection(InnerHexagonalDirection.LeftDown),
+                                Right,
+                                Left,
+                                RightUp,
+                                LeftUp,
+                                RightDown,
+                                LeftDown,
                             };
     }
 
@@ -88,11 +84,11 @@ namespace Othello.Business.Domain.Model.Boards
             if(dir == null)
                 throw new ArgumentException("Direction type and position type do not match.");
 
-            if (dir.Direction == HexagonalDirection.InnerHexagonalDirection.Right)
+            if (dir == HexagonalDirection.Right)
             {
                 return new HexagonalPosition(X + 1, Y);
             }
-            else if(dir.Direction == HexagonalDirection.InnerHexagonalDirection.Left)
+            else if(dir == HexagonalDirection.Left)
             {
                 return new HexagonalPosition(X - 1, Y);
             }
@@ -101,19 +97,19 @@ namespace Othello.Business.Domain.Model.Boards
                 // [奇数行/偶数行によって、上下に隣接するX軸の値が異なる]
                 var x = ((Y % 2) == 0) ?  X - 1 : X;
 
-                if (dir.Direction == HexagonalDirection.InnerHexagonalDirection.RightUp)
+                if (dir == HexagonalDirection.RightUp)
                 {
                     return new HexagonalPosition(x + 1, Y - 1);
                 }
-                else if(dir.Direction == HexagonalDirection.InnerHexagonalDirection.RightDown)
+                else if(dir == HexagonalDirection.RightDown)
                 {
                     return new HexagonalPosition(x + 1, Y + 1);
                 }
-                else if(dir.Direction == HexagonalDirection.InnerHexagonalDirection.LeftUp)
+                else if(dir == HexagonalDirection.LeftUp)
                 {
                     return new HexagonalPosition(x, Y - 1);
                 }
-                //else if(dir.Direction == HexagonalDirection.InnerHexagonalDirection.LeftDown)
+                //else if(dir == HexagonalDirection.LeftDown)
                 else
                 {
                     return new HexagonalPosition(x, Y + 1);
